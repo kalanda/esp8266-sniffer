@@ -140,5 +140,4 @@ void loop() {}
 - [Where’ve you been? Your smartphone’s Wi-Fi is telling everyone](http://arstechnica.com/information-technology/2014/11/where-have-you-been-your-smartphones-wi-fi-is-telling-everyone/)
 - [Passive wifi tracking](http://edwardkeeble.com/2014/02/passive-wifi-tracking/)
 - [IEEE 802.11 frame format](http://www.studioreti.it/slide/802-11-Frame_E_C.pdf)
-
 - [esp8266 forum](http://www.esp8266.com/viewtopic.php?f=6&t=1589)
