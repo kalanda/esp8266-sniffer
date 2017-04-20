@@ -92,17 +92,21 @@ static void getMAC(char *addr, uint8_t* data, uint16_t offset) {
   sprintf(addr, "%02x:%02x:%02x:%02x:%02x:%02x", data[offset+0], data[offset+1], data[offset+2], data[offset+3], data[offset+4], data[offset+5]);
 }
 
+#define DISABLE 0
+#define ENABLE  1
+
 void setup() {
+  // set the WiFi chip to "promiscuous" mode aka monitor mode
   Serial.begin(115200);
   delay(10);
   wifi_set_opmode(STATION_MODE);
   wifi_set_channel(1);
-  wifi_promiscuous_enable(0);
+  wifi_promiscuous_enable(DISABLE);
   delay(10);
   wifi_set_promiscuous_rx_cb(sniffer_callback);
   delay(10);
-  wifi_promiscuous_enable(1);
-	Serial.println("Listening on channel 01");
+  wifi_promiscuous_enable(ENABLE);
+
 }
 
 void loop() {}
