@@ -62,6 +62,9 @@ static void showMetadata(SnifferPacket *snifferPacket) {
   Serial.print("RSSI: ");
   Serial.print(snifferPacket->rx_ctrl.rssi, DEC);
 
+  Serial.print(" Ch: ");
+  Serial.print(wifi_get_channel());
+
   char addr[] = "00:00:00:00:00:00";
   getMAC(addr, snifferPacket->data, 10);
   Serial.print(" Peer MAC: ");
@@ -92,6 +95,21 @@ static void getMAC(char *addr, uint8_t* data, uint16_t offset) {
   sprintf(addr, "%02x:%02x:%02x:%02x:%02x:%02x", data[offset+0], data[offset+1], data[offset+2], data[offset+3], data[offset+4], data[offset+5]);
 }
 
+#define CHANNEL_HOP_INTERVAL_MS   1000
+static os_timer_t channelHop_timer;
+
+/**
+ * Callback for channel hoping
+ */
+void channelHop()
+{
+  // hoping channels 1-14
+  uint8 new_channel = wifi_get_channel() + 1;
+  if (new_channel > 14)
+    new_channel = 1;
+  wifi_set_channel(new_channel);
+}
+
 #define DISABLE 0
 #define ENABLE  1
 
@@ -107,6 +125,12 @@ void setup() {
   delay(10);
   wifi_promiscuous_enable(ENABLE);
 
+  // setup the channel hoping callback timer
+  os_timer_disarm(&channelHop_timer);
+  os_timer_setfn(&channelHop_timer, (os_timer_func_t *) channelHop, NULL);
+  os_timer_arm(&channelHop_timer, CHANNEL_HOP_INTERVAL_MS, 1);
 }
 
-void loop() {}
+void loop() {
+  delay(10);
+}
