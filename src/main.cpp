@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 extern "C" {
   #include <user_interface.h>
 }
@@ -8,7 +10,6 @@ extern "C" {
 #define TYPE_CONTROL          0x01
 #define TYPE_DATA             0x02
 #define SUBTYPE_PROBE_REQUEST 0x04
-
 
 struct RxControl {
  signed rssi:8; // signal intensity of packet
@@ -43,6 +44,14 @@ struct SnifferPacket{
     uint16_t cnt;
     uint16_t len;
 };
+
+// Declare each custom function (excluding built-in, such as setup and loop) before it will be called.
+// https://docs.platformio.org/en/latest/faq.html#convert-arduino-file-to-c-manually
+static void showMetadata(SnifferPacket *snifferPacket);
+static void ICACHE_FLASH_ATTR sniffer_callback(uint8_t *buffer, uint16_t length);
+static void printDataSpan(uint16_t start, uint16_t size, uint8_t* data);
+static void getMAC(char *addr, uint8_t* data, uint16_t offset);
+void channelHop();
 
 static void showMetadata(SnifferPacket *snifferPacket) {
 
