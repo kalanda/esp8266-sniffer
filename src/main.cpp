@@ -112,10 +112,11 @@ static os_timer_t channelHop_timer;
  */
 void channelHop()
 {
-  // hoping channels 1-14
+  // hoping channels 1-13
   uint8 new_channel = wifi_get_channel() + 1;
-  if (new_channel > 14)
+  if (new_channel > 13) {
     new_channel = 1;
+  }
   wifi_set_channel(new_channel);
 }
 
